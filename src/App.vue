@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 const isLoading = ref(true)
 const showProfile = ref(false)
@@ -12,9 +12,46 @@ const interactiveElements = ref([
 ])
 const currentElement = ref(0)
 
+const terminalMessages = ref([
+  { id: 1, text: 'Initializing terminal...', delay: 800 },
+  { id: 2, text: 'Loading configuration files...', delay: 1800 },
+  { id: 3, text: 'Establishing secure connection...', delay: 3000 },
+  { id: 4, text: 'Fetching portfolio data...', delay: 4200 },
+  { id: 5, text: 'Almost there...', delay: 5400 },
+  { id: 6, text: 'Welcome to Matthew Chuang\'s Portfolio!', delay: 7000 }
+])
+const currentTerminalLine = ref(0)
+
+const profileLines = ref([
+  { id: 1, type: 'name', text: 'Matthew Chuang' },
+  { id: 2, type: 'nav', text: 'About | Projects | Experience | Contact' },
+  { id: 3, type: 'hero', text: 'Hello World' },
+  { id: 4, type: 'desc', text: "I'm a passionate developer creating amazing digital experiences with modern technologies." },
+  { id: 5, type: 'buttons', text: '' },
+  { id: 6, type: 'skills', text: 'Skills & Technologies: React, Vue.js, Python, Node.js' }
+])
+const currentProfileLine = ref(0)
+
+const showProfileLine = (idx: number) => currentProfileLine.value > idx
+
+const startProfileReveal = () => {
+  profileLines.value.forEach((line, idx) => {
+    setTimeout(() => {
+      currentProfileLine.value = idx + 1
+    }, 400 * (idx + 1))
+  })
+}
+
+watch(showProfile, (val) => {
+  if (val) {
+    setTimeout(() => {
+      startProfileReveal()
+    }, 300)
+  }
+})
+
 onMounted(() => {
-  // Start the loading animation sequence
-  startLoadingSequence()
+  startTerminalLoadingSequence()
 })
 
 const startLoadingSequence = () => {
@@ -42,68 +79,52 @@ const startLoadingSequence = () => {
     }, element.delay)
   })
 }
+
+const startTerminalLoadingSequence = () => {
+  terminalMessages.value.forEach((msg, idx) => {
+    setTimeout(() => {
+      currentTerminalLine.value = idx + 1
+      if (idx === terminalMessages.value.length - 1) {
+        setTimeout(() => {
+          isLoading.value = false
+          setTimeout(() => {
+            showProfile.value = true
+          }, 500)
+        }, 1000)
+      }
+    }, msg.delay)
+  })
+}
 </script>
 
 <template>
-  <!-- Loading Screen -->
+  <!-- Terminal Loading Screen -->
   <Transition name="fade" mode="out-in">
-    <div v-if="isLoading" class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center">
-      <div class="text-center space-y-8">
-        <!-- Animated Logo/Icon -->
-        <div class="relative">
-          <div class="w-32 h-32 mx-auto bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center animate-pulse">
-            <span class="text-4xl">👨‍💻</span>
-          </div>
-          <!-- Orbiting dots -->
-          <div class="absolute inset-0 animate-spin">
-            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-yellow-400 rounded-full"></div>
-            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-pink-400 rounded-full"></div>
-            <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-green-400 rounded-full"></div>
-            <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-blue-400 rounded-full"></div>
+    <div v-if="isLoading" class="fixed inset-0 w-screen h-screen bg-black z-50 flex flex-col items-start justify-start">
+      <div class="terminal-window p-4 w-full max-w-xl mt-8 ml-8 bg-transparent shadow-none">
+        <div class="terminal-bar flex items-center mb-4">
+          <span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-400 mr-2"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+        </div>
+        <div class="terminal-content font-mono text-lg">
+          <div v-for="(msg, idx) in terminalMessages.slice(0, currentTerminalLine)" :key="msg.id" class="neon-text">
+            <span>&gt; </span>{{ msg.text }}
           </div>
         </div>
-        
-        <!-- Title -->
-        <h1 class="text-6xl font-bold text-white animate-bounce">
-          Welcome
-        </h1>
-        
-        <!-- Interactive Loading Messages -->
-        <div class="h-8">
-          <Transition name="slide-up" mode="out-in">
-            <p v-if="currentElement < interactiveElements.length" 
-               :key="currentElement"
-               class="text-xl text-gray-300 animate-pulse">
-              {{ interactiveElements[currentElement].text }}
-            </p>
-          </Transition>
-        </div>
-        
-        <!-- Progress Bar -->
-        <div class="w-80 mx-auto">
-          <div class="bg-gray-700 rounded-full h-2">
-            <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
-                 :style="{ width: loadingProgress + '%' }"></div>
-          </div>
-          <p class="text-sm text-gray-400 mt-2">{{ Math.round(loadingProgress) }}%</p>
-        </div>
-        
-        <!-- Click to skip hint -->
-        <p class="text-sm text-gray-500 animate-pulse">
-          Click anywhere to skip
-        </p>
+        <div v-if="currentTerminalLine < terminalMessages.length" class="font-mono text-blue-400 animate-pulse mt-4 neon-text">_</div>
       </div>
     </div>
   </Transition>
 
-  <!-- Main Profile -->
+  <!-- Main Profile as Terminal Output -->
   <Transition name="slide-up" mode="out-in">
     <div v-if="showProfile" class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <!-- Navigation -->
       <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md dark:bg-gray-900/80 z-50 transition-all duration-300">
         <div class="container-custom px-4 py-4">
           <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Your Name</h1>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Matthew Chuang</h1>
             <div class="hidden md:flex space-x-8">
               <a href="#about" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">About</a>
               <a href="#projects" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors">Projects</a>
@@ -113,7 +134,6 @@ const startLoadingSequence = () => {
           </div>
         </div>
       </nav>
-
       <!-- Hero Section -->
       <section class="section-padding pt-32">
         <div class="container-custom text-center">
@@ -135,7 +155,6 @@ const startLoadingSequence = () => {
           </div>
         </div>
       </section>
-
       <!-- Skills Section -->
       <section class="section-padding bg-white dark:bg-gray-800">
         <div class="container-custom">
@@ -191,13 +210,24 @@ const startLoadingSequence = () => {
   transform: translateY(0);
 }
 
-/* Custom animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+.terminal-window {
+  background: transparent;
+  border-radius: 0.75rem;
+  box-shadow: none;
+}
+.terminal-bar {
+  height: 1.5rem;
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+.terminal-content {
+  color: #38bdf8;
 }
+.neon-text {
+  color: #38bdf8;
+}
+
+.font-mono {
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+}
+
 </style>
