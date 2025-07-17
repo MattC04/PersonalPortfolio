@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-black">
-    <div class="terminal-window p-8 rounded-lg shadow-2xl w-full max-w-xl mx-auto">
+  <div class="min-h-screen flex justify-center bg-black">
+    <div class="terminal-window p-8 rounded-lg w-full max-w-xl mx-auto mt-8">
       <div class="terminal-bar flex items-center mb-4">
         <span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
         <span class="w-3 h-3 rounded-full bg-yellow-400 mr-2"></span>
@@ -40,9 +40,9 @@ const props = defineProps({
 
 <style scoped>
 .terminal-window {
-  background: #18181b;
+  background: #000;
   border-radius: 0.75rem;
-  box-shadow: 0 0 40px #0ea5e9aa;
+  box-shadow: none;
 }
 .terminal-bar {
   height: 1.5rem;

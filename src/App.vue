@@ -78,9 +78,9 @@ const startTerminalLoadingSequence = () => {
 
   <!-- Main Profile -->
   <Transition name="slide-up" mode="out-in">
-    <div v-if="showProfile" class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 font-montserrat">
+    <div v-if="showProfile" class="min-h-screen bg-black font-montserrat">
       <!-- Navigation -->
-      <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md dark:bg-gray-900/80 z-50 transition-all duration-300 font-montserrat">
+      <nav class="fixed top-0 w-full bg-black/80 backdrop-blur-md z-50 transition-all duration-300 font-montserrat">
         <div class="container-custom px-4 py-4">
           <div class="flex justify-between items-center">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-white font-montserrat">Matthew Chuang</h1>
@@ -94,7 +94,7 @@ const startTerminalLoadingSequence = () => {
         </div>
       </nav>
       <!-- Hero Section -->
-      <section class="section-padding pt-32 font-montserrat">
+      <section class="section-padding pt-32 font-montserrat bg-black">
         <div class="container-custom text-center">
           <div class="space-y-8">
             <h1 class="text-6xl md:text-8xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse font-montserrat">
@@ -115,24 +115,24 @@ const startTerminalLoadingSequence = () => {
         </div>
       </section>
       <!-- Skills Section -->
-      <section class="section-padding bg-white dark:bg-gray-800 font-montserrat">
+      <section class="section-padding bg-black font-montserrat">
         <div class="container-custom">
           <div class="text-center space-y-12">
             <h2 class="text-4xl font-bold text-gray-800 dark:text-white font-montserrat">Skills & Technologies</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div class="group p-6 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-blue-50 dark:hover:bg-gray-600 transition-all duration-300 transform hover:scale-105">
+              <div class="group p-6 bg-black rounded-xl transition-all duration-300 transform hover:scale-105">
                 <div class="text-4xl mb-4">⚛️</div>
                 <h3 class="font-semibold text-gray-800 dark:text-white font-montserrat">React</h3>
               </div>
-              <div class="group p-6 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-blue-50 dark:hover:bg-gray-600 transition-all duration-300 transform hover:scale-105">
+              <div class="group p-6 bg-black rounded-xl transition-all duration-300 transform hover:scale-105">
                 <div class="text-4xl mb-4">⚡</div>
                 <h3 class="font-semibold text-gray-800 dark:text-white font-montserrat">Vue.js</h3>
               </div>
-              <div class="group p-6 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-blue-50 dark:hover:bg-gray-600 transition-all duration-300 transform hover:scale-105">
+              <div class="group p-6 bg-black rounded-xl transition-all duration-300 transform hover:scale-105">
                 <div class="text-4xl mb-4">🐍</div>
                 <h3 class="font-semibold text-gray-800 dark:text-white font-montserrat">Python</h3>
               </div>
-              <div class="group p-6 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-blue-50 dark:hover:bg-gray-600 transition-all duration-300 transform hover:scale-105">
+              <div class="group p-6 bg-black rounded-xl transition-all duration-300 transform hover:scale-105">
                 <div class="text-4xl mb-4">🚀</div>
                 <h3 class="font-semibold text-gray-800 dark:text-white font-montserrat">Node.js</h3>
               </div>
@@ -192,5 +192,18 @@ const startTerminalLoadingSequence = () => {
 
 .font-montserrat {
   font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+
+.cursor-node {
+  position: fixed;
+  pointer-events: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 1.5px solid #fff;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+  transition: background 0.1s, border 0.1s;
 }
 </style>
