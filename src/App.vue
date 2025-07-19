@@ -83,7 +83,6 @@ const startTerminalLoadingSequence = () => {
       <nav class="fixed top-0 w-full bg-black/80 backdrop-blur-md z-50 transition-all duration-300 font-montserrat">
         <div class="container-custom px-4 py-4">
           <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white font-montserrat">Matthew Chuang</h1>
             <div class="hidden md:flex space-x-8">
               <a href="#about" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors font-montserrat">About</a>
               <a href="#projects" class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors font-montserrat">Projects</a>
@@ -97,6 +96,7 @@ const startTerminalLoadingSequence = () => {
       <section class="section-padding pt-32 font-montserrat bg-black">
         <div class="container-custom text-center">
           <div class="space-y-8">
+            <h1 class="text-5xl md:text-7xl font-bold text-white font-montserrat">Matthew Chuang</h1>
             <h1 class="text-6xl md:text-8xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse font-montserrat">
               Hello World
             </h1>

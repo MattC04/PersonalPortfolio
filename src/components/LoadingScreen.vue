@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen flex justify-center bg-black">
+  <div class="min-h-screen flex justify-center bg-black loading-screen-firamono">
     <div class="terminal-window p-8 rounded-lg w-full max-w-xl mx-auto mt-8">
       <div class="terminal-bar flex items-center mb-4">
         <span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
         <span class="w-3 h-3 rounded-full bg-yellow-400 mr-2"></span>
         <span class="w-3 h-3 rounded-full bg-green-500"></span>
       </div>
-      <div class="terminal-content font-mono text-lg">
+      <div class="terminal-content text-lg">
         <div v-for="(msg, idx) in terminalMessages.slice(0, currentTerminalLine)" :key="msg.id" class="neon-text">
           <span>&gt; </span>{{ (msg as TerminalMessage).text }}
         </div>
@@ -55,7 +55,11 @@ const props = defineProps({
   color: #38bdf8;
   text-shadow: 0 0 8px #38bdf8, 0 0 16px #0ea5e9;
 }
-.font-mono {
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+</style>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap');
+.loading-screen-firamono {
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace !important;
 }
 </style> 
