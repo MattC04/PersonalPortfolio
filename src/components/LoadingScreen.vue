@@ -8,16 +8,18 @@
       </div>
       <div class="terminal-content text-lg">
         <div v-for="(msg, idx) in terminalMessages.slice(0, currentTerminalLine)" :key="msg.id" class="neon-text">
-          <span>&gt; </span>{{ (msg as TerminalMessage).text }}
+          <span>&gt; </span>{{ msg.text }}
+        </div>
+        <div v-if="currentTerminalLine < terminalMessages.length" class="neon-text">
+          <span>&gt; </span>{{ getCurrentLineText() }}<span class="cursor-blink">_</span>
         </div>
       </div>
-      <div v-if="currentTerminalLine < terminalMessages.length" class="font-mono text-blue-400 animate-pulse mt-4 neon-text">_</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, ref, onMounted, onUnmounted, defineEmits } from 'vue'
 import type { PropType } from 'vue'
 
 interface TerminalMessage {
@@ -30,10 +32,54 @@ const props = defineProps({
   terminalMessages: {
     type: Array as PropType<TerminalMessage[]>,
     required: true
-  },
-  currentTerminalLine: {
-    type: Number,
-    required: true
+  }
+})
+
+const emit = defineEmits(['loading-complete'])
+
+const currentTerminalLine = ref(0)
+const currentChar = ref(0)
+const typewriterInterval = ref<number | null>(null)
+const typingSpeed = 50 // ms per character
+const linePause = 500 // ms pause between lines
+
+const getCurrentLineText = () => {
+  if (currentTerminalLine.value >= props.terminalMessages.length) return ''
+  const currentMessage = props.terminalMessages[currentTerminalLine.value]
+  return currentMessage.text.slice(0, currentChar.value)
+}
+
+function startTypewriter() {
+  if (typewriterInterval.value) {
+    clearInterval(typewriterInterval.value)
+  }
+  typewriterInterval.value = setInterval(() => {
+    if (currentTerminalLine.value >= props.terminalMessages.length) {
+      clearInterval(typewriterInterval.value!)
+      emit('loading-complete')
+      return
+    }
+    const currentMessage = props.terminalMessages[currentTerminalLine.value]
+    if (currentChar.value < currentMessage.text.length) {
+      currentChar.value++
+    } else {
+      clearInterval(typewriterInterval.value!)
+      setTimeout(() => {
+        currentChar.value = 0
+        currentTerminalLine.value++
+        startTypewriter()
+      }, linePause)
+    }
+  }, typingSpeed)
+}
+
+onMounted(() => {
+  startTypewriter()
+})
+
+onUnmounted(() => {
+  if (typewriterInterval.value) {
+    clearInterval(typewriterInterval.value)
   }
 })
 </script>
@@ -54,6 +100,13 @@ const props = defineProps({
 .neon-text {
   color: #38bdf8;
   text-shadow: 0 0 8px #38bdf8, 0 0 16px #0ea5e9;
+}
+.cursor-blink {
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 </style>
 
